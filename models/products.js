@@ -35,6 +35,10 @@ const productSchema = new mongoose.Schema(
       type: String,
       default: null,
     },
+    pUrl:[{
+      pUrl1: String,
+      pUrl2:String
+    }],
     pRatingsReviews: [
       {
         review: String,

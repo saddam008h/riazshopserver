@@ -1,8 +1,12 @@
 const productModel = require("../models/products");
 const fs = require("fs");
 const path = require("path");
+const {cloudinary} = require("../cloudinary/index");
 
 class Product {
+  //method
+
+
   // Delete Image from uploads -> products folder
   static deleteImages(images, mode) {
     var basePath =
@@ -44,7 +48,28 @@ class Product {
   async postAddProduct(req, res) {
     let { pName, pDescription, pPrice, pQuantity, pCategory, pOffer, pStatus } =
       req.body;
-    let images = req.files;
+
+    const cloudinaryImageUploadMethod = async file => {
+      return new Promise(resolve => {
+          cloudinary.uploader.upload( file , (err, res) => {
+              resolve({
+                res: res.secure_url
+              }) 
+            }
+          ) 
+      })
+    }
+
+    let urls = [];
+    const files = req.files;
+    for (const file of files) {
+      const { path } = file;
+      const newPath = await cloudinaryImageUploadMethod(path);
+      urls.push(newPath);
+    }
+    const productImagesUrls = urls.map( url => url.res )
+    console.log(productImagesUrls);
+    
     // Validation
     if (
       !pName |
@@ -55,31 +80,24 @@ class Product {
       !pOffer |
       !pStatus
     ) {
-      Product.deleteImages(images, "file");
       return res.json({ error: "All filled must be required" });
     }
     // Validate Name and description
     else if (pName.length > 255 || pDescription.length > 3000) {
-      Product.deleteImages(images, "file");
       return res.json({
         error: "Name 255 & Description must not be 3000 charecter long",
       });
     }
     // Validate Images
-    else if (images.length !== 2) {
-      Product.deleteImages(images, "file");
+    else if (productImagesUrls.length < 2) {
       return res.json({ error: "Must need to provide 2 images" });
     } else {
       try {
-        let allImages = [];
-        for (const img of images) {
-          allImages.push(img.filename);
-        }
         let newProduct = new productModel({
-          pImages: allImages,
+          pImages: productImagesUrls,
           pName,
           pDescription,
-          pPrice,
+          pPrice, 
           pQuantity,
           pCategory,
           pOffer,

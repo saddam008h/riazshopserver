@@ -1,6 +1,6 @@
 const { toTitleCase } = require("../config/function");
 const categoryModel = require("../models/categories");
-const fs = require("fs");
+const {cloudinary} = require("../cloudinary/index");
 
 class Category {
   async getAllCategory(req, res) {
@@ -17,32 +17,26 @@ class Category {
   async postAddCategory(req, res) {
     let { cName, cDescription, cStatus } = req.body;
     let cImage = req.file.filename;
-    const filePath = `../server/public/uploads/categories/${cImage}`;
-
+   
     if (!cName || !cDescription || !cStatus || !cImage) {
-      fs.unlink(filePath, (err) => {
-        if (err) {
-          console.log(err);
-        }
-        return res.json({ error: "All filled must be required" });
-      });
+        return res.json({ error: "All filled must be required" })
+      
     } else {
       cName = toTitleCase(cName);
       try {
         let checkCategoryExists = await categoryModel.findOne({ cName: cName });
         if (checkCategoryExists) {
-          fs.unlink(filePath, (err) => {
-            if (err) {
-              console.log(err);
-            }
             return res.json({ error: "Category already exists" });
-          });
         } else {
+          
+          const result = await cloudinary.uploader.upload(req.file.path)
+          const cUrl = result.secure_url
           let newCategory = new categoryModel({
             cName,
             cDescription,
             cStatus,
             cImage,
+            cUrl
           });
           await newCategory.save((err) => {
             if (!err) {
@@ -83,17 +77,17 @@ class Category {
     } else {
       try {
         let deletedCategoryFile = await categoryModel.findById(cId);
-        const filePath = `../server/public/uploads/categories/${deletedCategoryFile.cImage}`;
+        // const filePath = `../server/public/uploads/categories/${deletedCategoryFile.cImage}`;
 
         let deleteCategory = await categoryModel.findByIdAndDelete(cId);
         if (deleteCategory) {
           // Delete Image from uploads -> categories folder 
-          fs.unlink(filePath, (err) => {
-            if (err) {
-              console.log(err);
-            }
+          // fs.unlink(filePath, (err) => {
+          //   if (err) {
+          //     console.log(err);
+          //   }
             return res.json({ success: "Category deleted successfully" });
-          });
+          // });
         }
       } catch (err) {
         console.log(err);
