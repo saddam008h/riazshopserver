@@ -106,9 +106,7 @@ class Product {
         let save = await newProduct.save();
         if (save) {
           return res.json({ 
-            headers:{
-              Access-Control-Allow-Origin : "*"
-            },
+        
             success: "Product created successfully" 
           
           });
