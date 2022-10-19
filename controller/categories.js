@@ -16,7 +16,8 @@ class Category {
 
   async postAddCategory(req, res) {
     let { cName, cDescription, cStatus } = req.body;
-    let cImage = req.file.name;
+    let cImage = req.file;
+    console.log(cImage)
    
     if (!cName || !cDescription || !cStatus || !cImage) {
         return res.json({ error: "All filled must be required" })
