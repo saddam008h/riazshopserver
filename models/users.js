@@ -87,7 +87,7 @@ const userSchema = new mongoose.Schema(
     v2city:{
       type:String
   },
-    
+  },
   { timestamps: true }
 );
 
