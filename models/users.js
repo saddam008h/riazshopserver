@@ -22,8 +22,9 @@ const userSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
-    phoneNumber: {
+    phone: {
       type: Number,
+      required: true,
     },
     userImage: {
       type: String,
@@ -33,15 +34,60 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: false,
     },
-    secretKey: {
+    cnic : {
+      type:Number
+    },
+    father:{
+      type:String
+    },
+    address:{
+      type:String
+    },
+    city:{
+      type:String
+    },
+    
+    v1name: {
       type: String,
-      default: null,
+      required: true,
     },
-    history: {
-      type: Array,
-      default: [],
+    v1phone: {
+      type: Number,
+      required: true,
     },
+    v1cnic : {
+      type:Number
+    },
+    v1father:{
+      type:String
+    },
+    v1address:{
+      type:String
+    },
+    v1city:{
+      type:String
   },
+     v2name: {
+      type: String,
+      required: true,
+    },
+    v2phone: {
+      type: Number,
+      required: true,
+    },
+    v2cnic : {
+      type:Number
+    },
+    v2father:{
+      type:String
+    },
+    v2address:{
+      type:String
+    },
+    v2city:{
+      type:String
+  },
+    
   { timestamps: true }
 );
 
