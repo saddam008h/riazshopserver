@@ -16,7 +16,7 @@ class Category {
 
   async postAddCategory(req, res) {
     let { cName, cDescription, cStatus } = req.body;
-    let cImage = req.file;
+    let cImage = req.file.filename;
     console.log(cImage)
    
     if (!cName || !cDescription || !cStatus || !cImage) {
