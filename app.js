@@ -69,7 +69,7 @@ app.use("/api/product", productRouter);
 app.use("/api", brainTreeRouter);
 app.use("/api/order", orderRouter);
 app.use("/api/customize", customizeRouter);
-app.get("hello",(req,res)=>res.send('ggggg'))
+app.get("/hello",(req,res)=>res.send('ggggg'))
 
 // Run Server
 const PORT = process.env.PORT || 8000;
