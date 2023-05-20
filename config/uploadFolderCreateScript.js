@@ -1,8 +1,8 @@
 const fs = require("fs");
 
-const categoriesFolder = "./public/uploads/categories";
-const customizeFolder = "./public/uploads/customize";
-const productsFolder = "./public/uploads/products";
+const categoriesFolder = "../public/uploads/categories";
+const customizeFolder = "../public/uploads/customize";
+const productsFolder = "../public/uploads/products";
 
 const CreateAllFolder = () => {
   if (!fs.existsSync(categoriesFolder)) {
